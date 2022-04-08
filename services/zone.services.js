@@ -1,6 +1,5 @@
 const Zone = require("../models/zone");
 const serialPort = require("../utils/serialCom");
-const { getIo } = require("../utils/socket");
 const zoneStatus = require("../data/zoneStatus");
 
 class ZoneServices {
@@ -23,8 +22,7 @@ class ZoneServices {
     await Zone.query().findById(id).patch({
       name,
     });
-    // trigger socket message
-    getIo().emit("name-change", { id, name });
+
   }
 
   // Turn zone On/Off
@@ -33,16 +31,12 @@ class ZoneServices {
 
     serialPort.send(`${id}${status}#`);
 
-    // trigger socket event message
-    getIo().emit("status-change", { id, status });
   }
 
   // Turn all On/Off
   static async controlAll(value) {
     // will send serial command
     serialPort.send(`A${value}#`);
-    // trigger socket event message
-    getIo().emit("All", value);
   }
 
   // set zones to certain values
@@ -55,10 +49,7 @@ class ZoneServices {
       command = command + values[value];
     });
     command = command + "#";
-    console.log(command)
     serialPort.send(command);
-    // trigger socket event message
-    getIo().emit("statuses-change", data);
   }
 }
 
