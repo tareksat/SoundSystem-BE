@@ -30,6 +30,7 @@ class ZoneServices {
   // Turn zone On/Off
   static async controlZoneStatus(id, status) {
     // will send serial command
+
     serialPort.send(`${id}${status}#`);
 
     // trigger socket event message
@@ -54,6 +55,7 @@ class ZoneServices {
       command = command + values[value];
     });
     command = command + "#";
+    console.log(command)
     serialPort.send(command);
     // trigger socket event message
     getIo().emit("statuses-change", data);
