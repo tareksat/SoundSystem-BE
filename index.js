@@ -23,8 +23,3 @@ const server = app.listen(port, async ()=>{
     require('./cronJobs/cron')
 
 });
-
-const io = require('./utils/socket').init(server);
-io.on("connection", socket => {
-    console.log('Connected')
-});
