@@ -9,7 +9,7 @@ require('./utils/serialCom').init();
 const app = express();
 
 app.use(express.json());
-app.use(morgan('tiny'));
+// app.use(morgan('tiny'));
 app.use('/api/zones', zoneRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/prayertimes', prayerTimesRouter);
