@@ -59,6 +59,7 @@ class ZoneServices {
   // set zones to certain values
   static async setZones(values) {
     // send serial command containing values for each zone
+    serialPort.send(`11#`);
     const data = [];
     let command = "X";
     Object.keys(values).map((value, index) => {
