@@ -39,8 +39,16 @@ class ZoneServices {
   // Turn zone On/Off
   static async controlZoneStatus(id, status) {
     // will send serial command
-    serialPort.send(`${id}${status}#`);
+
     await Zone.query().findById(id).patch({ status });
+    const zones = await ZoneServices.getAllZoneStatus();
+    const keys = Object.keys(zones);
+    let counter = 0;
+    keys.map(async (key) => {
+      if (zones[key] !== 0) counter += 1;
+    });
+    if (counter === 0) await ZoneServices.controlAll(0);
+    else serialPort.send(`${id}${status}#`);
   }
 
   // Turn all On/Off
