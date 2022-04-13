@@ -83,8 +83,12 @@ class AzanServices {
         console.log(e);
       }
     }
+    const keys = Object.keys(times.currentStatus);
+    keys.map(async (key) => {
+      if (currentStatus[key] !== 0)
+        return await ZoneServices.setZones(currentStatus);
+    });
     await ZoneServices.controlAll(0);
-    await ZoneServices.setZones(currentStatus);
   }
 }
 
