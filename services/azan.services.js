@@ -31,44 +31,59 @@ class AzanServices {
 
   // check if azan exists
   static async checkPrayerTime() {
+    // 15 minutes before prayer time
+    const t1 = new moment().add(15, "minutes");
     const hour = moment().tz("Africa/Cairo").hour();
     const minute = moment().tz("Africa/Cairo").minute();
+    const hour_1 = t1.hour();
+    const minute_1 = t1.minute();
+
     const keys = Object.keys(times.prayerTimes);
     keys.map(async (key) => {
       const time = stringToDateTime(times.prayerTimes[key]);
       if (time.hour === hour && time.minute === minute) {
+        await AzanServices.playAzan(key, true);
+      } else if (time.hour === hour_1 && time.minute === minute_1) {
         await AzanServices.playAzan(key);
       }
     });
   }
 
   // play azan
-  static async playAzan(name) {
+  static async playAzan(name, type = false) {
     console.log(`Prayer Time Now ${name}`);
     const currentStatus = await ZoneServices.getAllZoneStatus();
-    console.log(currentStatus);
+
     // get enabled zones for this prayer time
     const settings = await Settings.getPrayerTimeSettings(name);
-    console.log(settings);
 
     if (settings.is_enabled === 0) return;
     // send command to activate zones
     delete settings.is_enabled;
     await ZoneServices.setZones(settings);
     // play azan accordingly
-    if (name === "Fajr") {
-      try {
-        await play("fajr");
-      } catch (e) {
-        console.log(e);
+    if (type) {
+      if (name === "Fajr") {
+        try {
+          await play("fajr");
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        try {
+          await play("rest");
+        } catch (e) {
+          console.log(e);
+        }
       }
     } else {
       try {
-        await play("rest");
+        await play("close");
       } catch (e) {
         console.log(e);
       }
     }
+
     await ZoneServices.setZones(currentStatus);
   }
 }
