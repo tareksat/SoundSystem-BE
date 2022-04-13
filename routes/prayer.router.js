@@ -1,8 +1,10 @@
-const router = require('express')();
-const PrayersController = require('../controllers/prayers.controller');
+const router = require("express")();
+const PrayersController = require("../controllers/prayers.controller");
 
-router.get('/', PrayersController.getPrayerTimes);
+router.get("/", PrayersController.getPrayerTimes);
 
-router.post('/', PrayersController.playAzan);
+router.post("/azan", PrayersController.playAzan);
+
+router.post("/preazan", PrayersController.playPreAzan);
 
 module.exports = router;
