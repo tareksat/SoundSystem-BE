@@ -83,7 +83,7 @@ class AzanServices {
         console.log(e);
       }
     }
-
+    await ZoneServices.controlAll(0);
     await ZoneServices.setZones(currentStatus);
   }
 }
@@ -104,4 +104,3 @@ function play(file) {
 }
 
 module.exports = AzanServices;
-
