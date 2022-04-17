@@ -39,7 +39,6 @@ class ZoneServices {
   // Turn zone On/Off
   static async controlZoneStatus(id, status) {
     // will send serial command
-
     await Zone.query().findById(id).patch({ status });
     const zones = await ZoneServices.getAllZoneStatus();
     const keys = Object.keys(zones);
