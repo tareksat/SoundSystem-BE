@@ -1,4 +1,5 @@
 const cron = require("node-cron");
+const { exec } = require("child_process");
 const moment = require("moment");
 const AzanServices = require("../services/azan.services");
 const times = require("../data/prayerTimes");
@@ -8,6 +9,7 @@ cron.schedule("*/3 * * * * *", async () => {
   if (!times.prayerTimes.Fajr) {
     await AzanServices.fetchPrayerTimes();
   }
+  exec("find . -name 'report.*.json' -delete", (error, stdout, stderr) => {});
 });
 
 // every minute to run azan if exists
